@@ -1,0 +1,9 @@
+<h3>Categorias:</h3>
+<hr />
+{{#each categorias}}
+  <a href="/postagens/{{slug}}">
+    <h5>{{nome}}</h5>
+  </a>
+{{else}}
+  <h6>Nenhuma categoria cadastrada</h6>
+{{/each}}
