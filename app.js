@@ -6,6 +6,7 @@ import express from 'express';
 import { engine } from 'express-handlebars';
 import { model, connect } from 'mongoose';
 import session from 'express-session';
+import MongoStore from 'connect-mongo';
 import flash from 'connect-flash';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
@@ -28,11 +29,16 @@ const app = express();
 const PORT = process.env.PORT || 8081;
 
 // Session
+
 app.use(session({
-    secret: process.env.SECRET_KEY,
-    resave: true,
-    saveUninitialized: true
-}));
+    secret: process.env.SESSION_SECRET || 'segredoSeguro',
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI,
+      ttl: 14 * 24 * 60 * 60 // Expiração da sessão em 14 dias
+    })
+  }));
 
 // PASSPORT - Inicialização
 app.use(passport.initialize());
