@@ -2,17 +2,23 @@ import express from 'express';
 import mongoose from 'mongoose';
 import passport from 'passport';
 import bcrypt from 'bcryptjs';
+import acesso from '../helpers/acesso.js'
 
 const router = express.Router();
 import '../models/Usuarios.js';
 const Usuarios = mongoose.model('usuarios');
 
+
+router.get('/', acesso.redirecionaSeLogado, (req, res) => {
+    res.render("usuarios/login");
+});
+
 // Página principal de registros
-router.get('/registro', (req, res) => {
+router.get('/registro', acesso.redirecionaSeLogado, (req, res) => {
     res.render("usuarios/registro");
 });
 
-router.post('/registro/novo', (req, res) => {
+router.post('/registro/novo', acesso.estaLogado , (req, res) => {
     let erros = [];
 
     if (!req.body.nome || req.body.nome.trim().length === 0) {
@@ -56,7 +62,7 @@ router.post('/registro/novo', (req, res) => {
                             novoUsuario.save()
                                 .then(() => {
                                     req.flash("success_msg", "Usuário cadastrado com sucesso.");
-                                    res.redirect("/usuarios/login");
+                                    res.redirect("/");
                                 })
                                 .catch((err) => {
                                     req.flash("error_msg", "Houve um erro ao cadastrar-se.");

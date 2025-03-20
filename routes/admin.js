@@ -5,11 +5,13 @@ import '../models/Categorias.js'
 const Categoria = model('categorias')
 import '../models/Postagens.js'
 const Postagem = model('postagens')
+import '../models/Usuarios.js'
+const Usuarios = model('usuarios')
 import acesso from '../helpers/acesso.js'
 
 // Página principal do painel admin
 router.get('/', acesso.eAdmin, (req, res) => {
-    res.render("admin/postagens")
+        res.render('admin/index')
 })
 
 // Página de posts
@@ -215,6 +217,28 @@ router.get('/categorias/deletar/:id', acesso.eAdmin, (req, res) => {
         .catch((err) => {
             req.flash("error_msg", "Houve um erro ao remover a categoria.");
             res.redirect("/admin/categorias");
+        });
+})
+
+// Página de usuarios
+router.get('/usuarios', acesso.eAdmin, (req, res) => {
+    Usuarios.find().lean().then((usuarios) => {
+        res.render('admin/usuarios', { usuarios: usuarios })
+    }).catch((e) => {
+        req.flash("error_msg", "Houve um erro ao listar os usuarios")
+        res.redirect("/admin")
+    })
+})
+
+router.get('/usuarios/deletar/:id', acesso.eAdmin, (req, res) => {
+    Usuarios.findByIdAndDelete({ _id: req.params.id })
+        .then(() => {
+            req.flash("success_msg", "Usuário removido com sucesso.");
+            res.redirect("/admin/usuarios");
+        })
+        .catch((err) => {
+            req.flash("error_msg", "Houve um erro ao remover o usuario.");
+            res.redirect("/admin/usuarios");
         });
 })
 

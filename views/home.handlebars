@@ -26,7 +26,7 @@
           style="cursor: pointer;"
         >sms</span>
 
-        <h6 class="mt-1">Comentários ({{comentarios.length}})</h6>
+        <h6 class="mt-1">Comentários ({{comentariosCount}})</h6>  <!-- Exibir contagem correta -->
       </div>
 
       <!-- Formulário de Comentários (Escondido por padrão) -->
@@ -51,8 +51,8 @@
 
 <!-- Script para exibir/ocultar o formulário e a lista de comentários -->
 <script>
-  function toggleComentario(id) { let form =
-  document.getElementById('comentario-form-' + id); let lista =
-  document.getElementById('comentario-lista-' + id);
-  form.classList.toggle('d-none'); lista.classList.toggle('d-none'); }
+  function toggleComentario(id) { 
+    let form = document.getElementById('comentario-form-' + id);
+    form.classList.toggle('d-none');
+  }
 </script>

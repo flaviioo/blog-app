@@ -7,11 +7,11 @@
     <small>{{postagem.conteudo}}</small>
   </div>
 
-  <!-- Formulário de Comentários (Escondido por padrão) -->
-  <div id="comentario-form-{{_id}}" class="m-3">
+  <!-- Formulário de Comentários -->
+  <div id="comentario-form-{{postagem._id}}" class="m-3">
     <h6>Deixe um comentário</h6>
-    <form action="/home" method="POST">
-      <input type="hidden" name="id" value="{{_id}}" />
+    <form action="/comentario/novo" method="POST">
+      <input type="hidden" name="id" value="{{postagem._id}}" />
       <textarea
         name="comentario"
         class="form-control mb-2"
@@ -22,15 +22,15 @@
     </form>
   </div>
 
-  <!-- Lista de Comentários (Escondida por padrão) -->
-  <div id="comentario-lista-{{_id}}" class="m-3">
+  <!-- Lista de Comentários -->
+  <div id="comentario-lista-{{postagem._id}}" class="m-3">
     <h6>Comentários ({{comentarios.length}})</h6>
     {{#if comentarios.length}}
       <ul class="list-group">
         {{#each comentarios}}
           <li class="list-group-item">
-            <strong>{{this.usuario}}:</strong>
-            {{this.texto}}
+            <strong>{{this.usuario.nome}}:</strong> <!-- Nome correto do usuário -->
+            {{this.comentario}}
           </li>
         {{/each}}
       </ul>
@@ -38,13 +38,4 @@
       <p class="text-muted">Nenhum comentário ainda.</p>
     {{/if}}
   </div>
-
 </div>
-
-<!-- Script para exibir/ocultar o formulário e a lista de comentários -->
-<script>
-  function toggleComentario(id) { let form =
-  document.getElementById('comentario-form-' + id); let lista =
-  document.getElementById('comentario-lista-' + id);
-  form.classList.toggle('d-none'); lista.classList.toggle('d-none'); }
-</script>

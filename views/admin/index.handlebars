@@ -1,1 +1,40 @@
-<button type="submit" class="btn btn-success mt-4">Teste</button>
+<div>
+    <h1>Bem vindo, {{usuario}}</h1>
+    <div class="container mt-4">
+  <div class="row">
+    <!-- Card de Postagens -->
+    <div class="col-md-4">
+      <div class="card text-white bg-primary mb-3">
+        <div class="card-body text-center">
+          <h5 class="card-title">Postagens</h5>
+          <p class="card-text display-4">{{quantidadePostagens}}</p>
+          <a href="/admin/postagens" class="btn btn-light">Ver todas</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card de Categorias -->
+    <div class="col-md-4">
+      <div class="card text-white bg-success mb-3">
+        <div class="card-body text-center">
+          <h5 class="card-title">Categorias</h5>
+          <p class="card-text display-4">{{quantidadeCategorias}}</p>
+          <a href="/admin/categorias" class="btn btn-light">Ver todas</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card de Usuários -->
+    <div class="col-md-4">
+      <div class="card text-white bg-danger mb-3">
+        <div class="card-body text-center">
+          <h5 class="card-title">Usuários</h5>
+          <p class="card-text display-4">{{quantidadeUsuarios}}</p>
+          <a href="/admin/usuarios" class="btn btn-light">Ver todos</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>

@@ -3,18 +3,28 @@ const eAdmin = (req, res, next) => {
         return next();
     }
     req.flash("error_msg", "Acesso negado! Apenas administradores podem acessar esta página.");
-    res.redirect("/");
+    res.redirect("/home");
 };
 
 const estaLogado = (req, res, next) => {
-    if (req.isAuthenticated() && req.user) {
+    if (req.isAuthenticated()) {
         return next();
     }
     req.flash("error_msg", "Você precisa estar logado para acessar esta página.");
-    res.redirect("/usuarios/login");
+    res.redirect("/");
+};
+
+// Middleware para impedir usuários logados de acessarem login e registro
+const redirecionaSeLogado = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        req.flash("info_msg", "Você já está logado.");
+        return res.redirect("/home");
+    }
+    next();
 };
 
 export default {
     eAdmin, 
-    estaLogado
+    estaLogado,
+    redirecionaSeLogado
 };

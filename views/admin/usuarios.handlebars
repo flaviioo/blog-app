@@ -1,0 +1,32 @@
+<div class="container mt-5">
+    <a class="my-5" href="/home">
+        <span class="material-symbols-outlined">keyboard_backspace</span>
+    </a>
+    <h2 class="mb-4">Lista de Usuários</h2>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Nivel</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each usuarios}}
+                <tr>
+                    <td>{{@index}}</td>
+                    <td>{{nome}}</td>
+                    <td>{{email}}</td>
+                    <td>{{eAdmin}}</td>
+                    <td>
+                        <a href="/admin/usuarios/deletar/{{_id}}" class="btn btn-sm btn-outline-danger">Excluir</a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
