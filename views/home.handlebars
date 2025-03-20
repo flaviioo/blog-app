@@ -1,0 +1,58 @@
+<div class="jumbotron">
+  <h1 class="display-4">Bem-vindo ao BlogApp</h1>
+  <div class="lead">Isto é um Blog simples, desenvolvido com Node.js + Express +
+    MongoDB</div>
+  <p class="mb-3">Aqui você poderá ler sobre as novidades do mundo da computação.</p>
+</div>
+
+<hr class="mt-5"/>
+<h6>Postagens recentes</h6>
+
+{{#each postagens}}
+  <div class="card mt-3">
+    <div class="card-body">
+      <h4>{{titulo}}</h4>
+      <small>{{descricao}}</small>
+      <p>{{conteudo}}</p>
+      <a href="/postagem/{{slug}}"><button class="my-1 btn btn-success">Ler mais</button></a>
+      <hr />
+      <small>Data de publicação: {{date}}</small>
+
+      <!-- Ícone para exibir o formulário de comentários -->
+      <div class="mt-3 d-flex align-items-center gap-2">
+        <span
+          class="material-symbols-outlined"
+          onclick="toggleComentario('{{_id}}')"
+          style="cursor: pointer;"
+        >sms</span>
+
+        <h6 class="mt-1">Comentários ({{comentarios.length}})</h6>
+      </div>
+
+      <!-- Formulário de Comentários (Escondido por padrão) -->
+      <div id="comentario-form-{{_id}}" class="mt-3 d-none">
+        <h6>Deixe um comentário</h6>
+        <form action="/home" method="POST">
+          <input type="hidden" name="id" value="{{_id}}" />
+          <textarea
+            name="comentario"
+            class="form-control mb-2"
+            placeholder="Escreva seu comentário..."
+            required
+          ></textarea>
+          <button type="submit" class="btn btn-primary btn-sm">Enviar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{{else}}
+  <h5 class="mt-3">Opss... Nenhuma postagem registrada.</h5>
+{{/each}}
+
+<!-- Script para exibir/ocultar o formulário e a lista de comentários -->
+<script>
+  function toggleComentario(id) { let form =
+  document.getElementById('comentario-form-' + id); let lista =
+  document.getElementById('comentario-lista-' + id);
+  form.classList.toggle('d-none'); lista.classList.toggle('d-none'); }
+</script>

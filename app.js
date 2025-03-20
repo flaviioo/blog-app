@@ -14,6 +14,8 @@ import './models/Postagens.js';
 const Postagem = model('postagens');
 import './models/Categorias.js';
 const Categoria = model('categorias');
+const Comentario = model('comentarios');
+import './models/Comentarios.js';
 import configurePassport from './config/auth.js';
 import passport from 'passport';
 configurePassport(passport);
@@ -80,8 +82,16 @@ app.use(express.static(join(__dirname, 'public')));
 // Rotas
 app.get('/', async (req, res) => {
     try {
+        res.render('usuarios/login');
+    } catch (e) {
+        res.redirect("/");
+    }
+});
+
+app.get('/home', async (req, res) => {
+    try {
         const postagens = await Postagem.find().lean().sort({ date: -1 });
-        res.render('index', { postagens });
+        res.render('home', { postagens });
     } catch (e) {
         req.flash("error_msg", "Houve um erro ao listar as postagens");
         res.redirect("/");
@@ -129,8 +139,48 @@ app.get('/postagens/:slug', async (req, res) => {
     }
 });
 
+app.post('/home', async (req, res) => {
+    try {        
+        // Pegando o usuário autenticado
+        if (!req.user) {
+            req.flash("error_msg", "Você precisa estar logado para comentar.");
+            return res.redirect("/home");
+        }
+
+        const usuarioId = req.user._id; // Pega o ID do usuário autenticado
+        const postagemId = req.body.id 
+        const comentario = req.body.comentario; // Pega a postagem e o comentário do formulário
+
+        // Verifica se a postagem existe
+        const postagem = await Postagem.findById(postagemId);
+        if (!postagem) {
+            req.flash("error_msg", "A postagem não foi encontrada.");
+            return res.redirect("/home");
+        }
+
+        // Criando o novo comentário
+        const novoComentario = new Comentario({
+            usuario: usuarioId,
+            postagem: postagemId,
+            comentario: comentario
+        });
+
+        await novoComentario.save();
+        req.flash("success_msg", "Comentário adicionado com sucesso.");
+        res.redirect(`/postagem/${postagem.slug}`); // Redireciona para a página da postagem
+
+    } catch (error) {
+        console.error("Erro ao adicionar comentário:", error);
+        req.flash("error_msg", "Erro ao adicionar comentário.");
+        res.redirect("/home");
+    }
+});
+
+
 app.use('/admin', admin);
 app.use('/usuarios', usuarios);
+
+
 
 // Outros
 app.listen(PORT, () => {

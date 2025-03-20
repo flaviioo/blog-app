@@ -72,14 +72,14 @@ router.post('/registro/novo', (req, res) => {
     }
 });
 
-router.get('/login', (req, res) => {
+router.get('/', (req, res) => {
     res.render("usuarios/login");
 });
 
 router.post('/login',
     passport.authenticate('local', {
-        successRedirect: '/',
-        failureRedirect: '/usuarios/login', // Corrigindo o redirecionamento para login em caso de falha
+        successRedirect: '/home',
+        failureRedirect: '/', // Corrigindo o redirecionamento para login em caso de falha
         failureFlash: true
     })
 );

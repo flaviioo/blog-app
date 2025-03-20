@@ -5,15 +5,15 @@ import '../models/Categorias.js'
 const Categoria = model('categorias')
 import '../models/Postagens.js'
 const Postagem = model('postagens')
-import eAdmin from "../helpers/eAdmin.js"// vai servir para controlar o acesso
+import acesso from '../helpers/acesso.js'
 
 // Página principal do painel admin
-router.get('/', eAdmin, (req, res) => {
+router.get('/', acesso.eAdmin, (req, res) => {
     res.render("admin/postagens")
 })
 
 // Página de posts
-router.get('/postagens', eAdmin, (req, res) => {
+router.get('/postagens', acesso.eAdmin, (req, res) => {
     Postagem.find().populate('categoria').lean().sort({ date: -1 }).then((postagens) => {
         res.render('admin/postagens', { postagens: postagens })
     }).catch((e) => {
@@ -22,7 +22,7 @@ router.get('/postagens', eAdmin, (req, res) => {
     })
 })
 
-router.get('/postagem/add', eAdmin, (req, res) => {
+router.get('/postagem/add', acesso.eAdmin, (req, res) => {
     Categoria.find().lean()
         .then((categorias) => {
             res.render("admin/addpostagens", { categorias: categorias })
@@ -32,7 +32,7 @@ router.get('/postagem/add', eAdmin, (req, res) => {
         })
 })
 
-router.post('/postagem/nova', eAdmin, (req, res) => {
+router.post('/postagem/nova', acesso.eAdmin, (req, res) => {
     const novaPostagem = new Postagem({
         titulo: req.body.titulo,
         slug: req.body.slug,
@@ -51,7 +51,7 @@ router.post('/postagem/nova', eAdmin, (req, res) => {
         });
 })
 
-router.get('/postagem/editar/:id', eAdmin, (req, res) => {
+router.get('/postagem/editar/:id', acesso.eAdmin, (req, res) => {
     Postagem.findOne({ _id: req.params.id })
         .then((postagem) => {
             let post = {
@@ -77,7 +77,7 @@ router.get('/postagem/editar/:id', eAdmin, (req, res) => {
 
 })
 
-router.post('/postagem/atualizar/', eAdmin, (req, res) => {
+router.post('/postagem/atualizar/', acesso.eAdmin, (req, res) => {
 
     Postagem.findOne({ _id: req.body.id })
         .then((postagem) => {
@@ -102,7 +102,7 @@ router.post('/postagem/atualizar/', eAdmin, (req, res) => {
         });
 })
 
-router.get('/postagem/deletar/:id', eAdmin, (req, res) => {
+router.get('/postagem/deletar/:id', acesso.eAdmin, (req, res) => {
     Postagem.findByIdAndDelete({ _id: req.params.id })
         .then(() => {
             req.flash("success_msg", "Postagem removida com sucesso.");
@@ -115,7 +115,7 @@ router.get('/postagem/deletar/:id', eAdmin, (req, res) => {
 })
 
 // Página de categorias
-router.get('/categorias', eAdmin, (req, res) => {
+router.get('/categorias', acesso.eAdmin, (req, res) => {
     Categoria.find().lean().sort({ date: -1 }).then((categorias) => {
         res.render('admin/categorias', { categorias: categorias })
     }).catch((e) => {
@@ -125,12 +125,12 @@ router.get('/categorias', eAdmin, (req, res) => {
 })
 
 // Formulário para adicionar categorias
-router.get('/categorias/add', eAdmin, (req, res) => {
+router.get('/categorias/add', acesso.eAdmin, (req, res) => {
     res.render("admin/addcategorias")
 })
 
 // Rota para criar nova categoria
-router.post('/categorias/nova', eAdmin, (req, res) => {
+router.post('/categorias/nova', acesso.eAdmin, (req, res) => {
     let erros = [];
 
     if (!req.body.nome || req.body.nome.trim().length === 0) {
@@ -166,7 +166,7 @@ router.post('/categorias/nova', eAdmin, (req, res) => {
     }
 });
 
-router.get('/categorias/editar/:id', eAdmin, (req, res) => {
+router.get('/categorias/editar/:id', acesso.eAdmin, (req, res) => {
     Categoria.findOne({ _id: req.params.id })
         .then((categoria) => {
             let cat = {
@@ -183,7 +183,7 @@ router.get('/categorias/editar/:id', eAdmin, (req, res) => {
 
 })
 
-router.post('/categorias/atualizar', eAdmin, (req, res) => {
+router.post('/categorias/atualizar', acesso.eAdmin, (req, res) => {
     Categoria.findOne({ _id: req.body.id })
         .then((categoria) => {
 
@@ -206,7 +206,7 @@ router.post('/categorias/atualizar', eAdmin, (req, res) => {
         });
 })
 
-router.get('/categorias/deletar/:id', eAdmin, (req, res) => {
+router.get('/categorias/deletar/:id', acesso.eAdmin, (req, res) => {
     Categoria.findByIdAndDelete({ _id: req.params.id })
         .then(() => {
             req.flash("success_msg", "Categoria removida com sucesso.");
